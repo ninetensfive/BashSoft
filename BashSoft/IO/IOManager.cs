@@ -1,4 +1,6 @@
-﻿namespace BashSoft
+﻿using BashSoft.Contracts;
+
+namespace BashSoft
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +8,7 @@
     using Exceptions;
     using Execptions;
 
-    public class IOManager
+    public class IOManager : IDirectoryManager
     {
         public void TraverseDirectory(int depth)
         {

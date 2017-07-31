@@ -3,14 +3,16 @@
     using System;
     using Execptions;
     using IO.Commands;
+    using Contracts;
 
-    public class CommandInterpreter
+    public class CommandInterpreter : IInterpreter
     {
         private Tester judge;
         private StudentsRepository repository;
-        private IOManager inputOutputManager;
+        private IDirectoryManager inputOutputManager;
 
-        public CommandInterpreter(Tester judge, StudentsRepository repository, IOManager inputOutputManager)
+        public CommandInterpreter(Tester judge, StudentsRepository repository, 
+            IDirectoryManager inputOutputManager)
         {
             this.judge = judge;
             this.repository = repository;
@@ -24,7 +26,7 @@
 
             try
             {
-                Command command = this.ParseCommand(input, commandName, data);
+                IExecutable command = this.ParseCommand(input, commandName, data);
                 command.Execute();
             }
             catch (Exception e)
@@ -33,7 +35,7 @@
             }
         }
 
-        private Command ParseCommand(string input, string command, string[] data)
+        private IExecutable ParseCommand(string input, string command, string[] data)
         {
             switch (command)
             {

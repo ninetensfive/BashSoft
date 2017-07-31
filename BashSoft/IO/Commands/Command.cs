@@ -1,18 +1,21 @@
-﻿namespace BashSoft.IO.Commands
+﻿using BashSoft.Contracts;
+
+namespace BashSoft.IO.Commands
 {
     using System;
     using Execptions;
 
-    public abstract class Command
+    public abstract class Command : IExecutable
     {
         private string input;
         private string[] data;
 
         private Tester judge;
         private StudentsRepository repository;
-        private IOManager inputOutputManager;
+        private IDirectoryManager inputOutputManager;
 
-        public Command(string input, string[] data, Tester judge, StudentsRepository repository, IOManager inputOutputManager)
+        public Command(string input, string[] data, Tester judge, 
+            StudentsRepository repository, IDirectoryManager inputOutputManager)
         {
             this.Input = input;
             this.Data = data;
@@ -57,7 +60,7 @@
             get { return this.repository; }
         }
 
-        protected IOManager InputOutputManager
+        protected IDirectoryManager InputOutputManager
         {
             get { return this.inputOutputManager; }
         }

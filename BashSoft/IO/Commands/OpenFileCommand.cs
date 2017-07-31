@@ -2,10 +2,13 @@
 {
     using System.Diagnostics;
     using Execptions;
+    using Contracts;
 
     public class OpenFileCommand : Command
     {
-        public OpenFileCommand(string input, string[] data, Tester judge, StudentsRepository repository, IOManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager)
+        public OpenFileCommand(string input, string[] data, Tester judge, 
+            StudentsRepository repository, IDirectoryManager inputOutputManager) 
+            : base(input, data, judge, repository, inputOutputManager)
         {
             
         }
