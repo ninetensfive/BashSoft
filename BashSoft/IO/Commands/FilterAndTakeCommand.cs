@@ -5,7 +5,7 @@
 
     public class FilterAndTakeCommand : Command
     {
-        public FilterAndTakeCommand(string input, string[] data, Tester judge, StudentsRepository repository,
+        public FilterAndTakeCommand(string input, string[] data, IContentComparer judge, IDatabase repository,
             IDirectoryManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager) { }
 
         private void TryParseParametersForFilterAndTake(string takeCommand, string takeQuantity, string courseName, string filter)

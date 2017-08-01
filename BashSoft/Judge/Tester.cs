@@ -1,10 +1,12 @@
-﻿namespace BashSoft
+﻿using BashSoft.Contracts;
+
+namespace BashSoft
 {
     using System;
     using System.IO;
     using Execptions;
 
-    public class Tester
+    public class Tester : IContentComparer
     {
         private string GetMismatchPath(string expectedOutputPath)
         {

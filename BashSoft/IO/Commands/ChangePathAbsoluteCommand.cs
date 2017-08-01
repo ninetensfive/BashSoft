@@ -6,7 +6,7 @@ namespace BashSoft.IO.Commands
 
     public class ChangePathAbsoluteCommand : Command
     {
-        public ChangePathAbsoluteCommand(string input, string[] data, Tester judge, StudentsRepository repository,
+        public ChangePathAbsoluteCommand(string input, string[] data, IContentComparer judge, IDatabase repository,
             IDirectoryManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager) { }
 
         public override void Execute()

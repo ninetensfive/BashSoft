@@ -7,11 +7,11 @@
 
     public class CommandInterpreter : IInterpreter
     {
-        private Tester judge;
-        private StudentsRepository repository;
+        private IContentComparer judge;
+        private IDatabase repository;
         private IDirectoryManager inputOutputManager;
 
-        public CommandInterpreter(Tester judge, StudentsRepository repository, 
+        public CommandInterpreter(IContentComparer judge, IDatabase repository, 
             IDirectoryManager inputOutputManager)
         {
             this.judge = judge;

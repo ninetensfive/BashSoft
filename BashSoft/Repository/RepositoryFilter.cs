@@ -1,9 +1,11 @@
-﻿namespace BashSoft
+﻿using BashSoft.Contracts;
+
+namespace BashSoft
 {
     using System;
     using System.Collections.Generic;
 
-    public class RepositoryFilter
+    public class RepositoryFilter : IDataFilter
     {
         public void FilterAndTake(Dictionary<string, double> studentsWithMarks, string wantedFilters, int studentsToTake)
         {

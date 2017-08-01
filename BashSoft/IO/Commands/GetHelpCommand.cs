@@ -5,7 +5,7 @@
 
     public class GetHelpCommand : Command
     {
-        public GetHelpCommand(string input, string[] data, Tester judge, StudentsRepository repository,
+        public GetHelpCommand(string input, string[] data, IContentComparer judge, IDatabase repository,
             IDirectoryManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager)
         {
         }
