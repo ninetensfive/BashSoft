@@ -1,16 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BashSoft.Contracts
 {
-    public interface IStudent
+    public interface IStudent : IComparable<IStudent>
+
     {
-        string Username { get; }
+    string Username { get; }
 
-        IReadOnlyDictionary<string, ICourse> EnrolledCourses { get; }
-        IReadOnlyDictionary<string, double> MarksByCourseName { get; }
+    IReadOnlyDictionary<string, ICourse> EnrolledCourses { get; }
+    IReadOnlyDictionary<string, double> MarksByCourseName { get; }
 
-        void EnrollInCourse(ICourse course);
+    void EnrollInCourse(ICourse course);
 
-        void SetMarkOnCourse(string courseName, params int[] scores);
+    void SetMarkOnCourse(string courseName, params int[] scores);
     }
 }

@@ -75,5 +75,15 @@ namespace BashSoft.Models
 
             return mark;
         }
+
+        public int CompareTo(IStudent other)
+        {
+            return this.Username.CompareTo(other.Username);
+        }
+
+        public override string ToString()
+        {
+            return this.Username;
+        }
     }
 }

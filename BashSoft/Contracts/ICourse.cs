@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BashSoft.Contracts
 {
-    public interface ICourse
+    public interface ICourse : IComparable<ICourse>
     {
         String Name { get; }
 
