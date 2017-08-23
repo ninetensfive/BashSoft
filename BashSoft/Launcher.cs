@@ -1,7 +1,7 @@
-﻿using BashSoft.Contracts;
-
-namespace BashSoft
+﻿namespace BashSoft
 {
+    using Contracts;
+
     public class Launcher
     {
         public static void Main()
@@ -11,7 +11,7 @@ namespace BashSoft
             IDatabase repo = new StudentsRepository(new RepositoryFilter(), new RepositorySorter());
 
             IInterpreter currentInterpreter = new CommandInterpreter(tester, repo, ioManager);
-            IReader reader =  new InputReader(currentInterpreter);
+            IReader reader = new InputReader(currentInterpreter);
 
             reader.StartReadingCommands();
         }

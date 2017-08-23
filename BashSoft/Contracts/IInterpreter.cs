@@ -1,9 +1,9 @@
-﻿using System;
-
-namespace BashSoft.Contracts
+﻿namespace BashSoft.Contracts
 {
+    using System;
+
     public interface IInterpreter
     {
-        void InterpretCommand(String command);
+        void InterpretCommand(string command);
     }
 }

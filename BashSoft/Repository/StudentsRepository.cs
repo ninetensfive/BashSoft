@@ -1,13 +1,12 @@
-﻿using BashSoft.Contracts;
-using BashSoft.DataStructures;
-
-namespace BashSoft
+﻿namespace BashSoft
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
+    using Contracts;
+    using DataStructures;
     using Execptions;
     using Models;
 
@@ -27,10 +26,10 @@ namespace BashSoft
             this.sorter = sorter;
             this.isDataInilized = false;
         }
-        
+
         public void FilterAndTake(string courseName, string givenFilter, int? studentsToTake = null)
         {
-            if (IsQueryForCoursePossible(courseName))
+            if (this.IsQueryForCoursePossible(courseName))
             {
                 if (studentsToTake == null)
                 {
@@ -45,7 +44,7 @@ namespace BashSoft
 
         public void OrderAndTake(string courseName, string comparison, int? studentsToTake = null)
         {
-            if (IsQueryForCoursePossible(courseName))
+            if (this.IsQueryForCoursePossible(courseName))
             {
                 if (studentsToTake == null)
                 {
@@ -64,11 +63,11 @@ namespace BashSoft
             {
                 throw new ArgumentException(ExceptionMessages.DataAlreadyInitialisedException);
             }
-            
+
             this.courses = new Dictionary<string, ICourse>();
             this.students = new Dictionary<string, IStudent>();
             OutputWriter.WriteMessageOnNewLine("Reading data...");
-            ReadData(fileName);
+            this.ReadData(fileName);
         }
 
         public void UnloadData()
@@ -82,10 +81,44 @@ namespace BashSoft
             this.students = null;
             this.isDataInilized = false;
         }
+   
+        public void GetStudentScoresFromCourse(string courseName, string username)
+        {
+            OutputWriter.PrintStudent(
+                new KeyValuePair<string, double>(username, this.courses[courseName].StudentsByName[username].MarksByCourseName[courseName]));
+        }
+
+        public void GetAllStudentsFromCourse(string courseName)
+        {
+            if (this.IsQueryForCoursePossible(courseName))
+            {
+                OutputWriter.WriteMessageOnNewLine($"{courseName}");
+                foreach (var studetMarksEntry in this.courses[courseName].StudentsByName)
+                {
+                    this.GetStudentScoresFromCourse(courseName, studetMarksEntry.Key);
+                }
+            }
+        }
+
+        public ISimpleOrderedBag<ICourse> GetAllCoursesSorted(IComparer<ICourse> cmp)
+        {
+            SimpleSortedList<ICourse> sortedCourses = new SimpleSortedList<ICourse>(cmp);
+            sortedCourses.AddAll(this.courses.Values);
+
+            return sortedCourses;
+        }
+
+        public ISimpleOrderedBag<IStudent> GetAllStudentsSorted(IComparer<IStudent> cmp)
+        {
+            SimpleSortedList<IStudent> sortedStudents = new SimpleSortedList<IStudent>(cmp);
+            sortedStudents.AddAll(this.students.Values);
+
+            return sortedStudents;
+        }
 
         private void ReadData(string fileName)
         {
-            string path = SessionData.currentPath + "\\" + fileName;
+            string path = SessionData.CurrentPath + "\\" + fileName;
             if (File.Exists(path))
             {
                 var rgx = new Regex(@"([A-Z][a-zA-Z#\++]*_[A-Z][a-z]{2}_\d{4})\s+([A-Za-z]+\d{2}_\d{2,4})\s([\s0-9]+)");
@@ -101,7 +134,7 @@ namespace BashSoft
 
                         try
                         {
-                            var scores = scoreStr.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries)
+                            var scores = scoreStr.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
                                 .Select(int.Parse)
                                 .ToArray();
 
@@ -119,7 +152,7 @@ namespace BashSoft
 
                             if (!this.students.ContainsKey(username))
                             {
-                                this.students.Add(username, new SoftUniStudent(username));   
+                                this.students.Add(username, new SoftUniStudent(username));
                             }
 
                             if (!this.courses.ContainsKey(courseName))
@@ -133,7 +166,6 @@ namespace BashSoft
                             student.EnrollInCourse(course);
                             student.SetMarkOnCourse(courseName, scores);
                             course.EnrollStudent(student);
-                            
                         }
                         catch (FormatException fex)
                         {
@@ -147,13 +179,13 @@ namespace BashSoft
                 throw new InvalidPathException();
             }
 
-            isDataInilized = true;
+            this.isDataInilized = true;
             OutputWriter.WriteMessageOnNewLine("Data read!");
         }
 
         private bool IsQueryForCoursePossible(string courseName)
         {
-            if (isDataInilized)
+            if (this.isDataInilized)
             {
                 if (this.courses.ContainsKey(courseName))
                 {
@@ -184,40 +216,6 @@ namespace BashSoft
             }
 
             return false;
-        }
-
-        public void GetStudentScoresFromCourse(string courseName, string username)
-        {
-            OutputWriter.PrintStudent(
-                new KeyValuePair<string, double>(username, this.courses[courseName].StudentsByName[username].MarksByCourseName[courseName]));
-        }
-
-        public void GetAllStudentsFromCourse(string courseName)
-        {
-            if (IsQueryForCoursePossible(courseName))
-            {
-                OutputWriter.WriteMessageOnNewLine($"{courseName}");
-                foreach (var studetMarksEntry in this.courses[courseName].StudentsByName)
-                {
-                    this.GetStudentScoresFromCourse(courseName, studetMarksEntry.Key);
-                }
-            }
-        }
-
-        public ISimpleOrderedBag<ICourse> GetAllCoursesSorted(IComparer<ICourse> cmp)
-        {
-            SimpleSortedList<ICourse> sortedCourses = new SimpleSortedList<ICourse>(cmp);
-            sortedCourses.AddAll(this.courses.Values);
-
-            return sortedCourses;
-        }
-
-        public ISimpleOrderedBag<IStudent> GetAllStudentsSorted(IComparer<IStudent> cmp)
-        {
-            SimpleSortedList<IStudent> sortedStudents = new SimpleSortedList<IStudent>(cmp);
-            sortedStudents.AddAll(this.students.Values);
-
-            return sortedStudents;
         }
     }
 }

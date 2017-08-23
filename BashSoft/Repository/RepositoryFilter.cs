@@ -1,9 +1,8 @@
-﻿using BashSoft.Contracts;
-
-namespace BashSoft
+﻿namespace BashSoft
 {
-    using System;
+   using System;
     using System.Collections.Generic;
+    using Contracts;
 
     public class RepositoryFilter : IDataFilter
     {
@@ -11,15 +10,15 @@ namespace BashSoft
         {
             if (wantedFilters == "excellent")
             {
-               FilterAndTake(studentsWithMarks, x => x >= 5, studentsToTake); 
+                this.FilterAndTake(studentsWithMarks, x => x >= 5, studentsToTake);
             }
             else if (wantedFilters == "average")
             {
-                FilterAndTake(studentsWithMarks, x => x >= 3.5 && x < 5, studentsToTake);
+                this.FilterAndTake(studentsWithMarks, x => x >= 3.5 && x < 5, studentsToTake);
             }
             else if (wantedFilters == "poor")
             {
-                FilterAndTake(studentsWithMarks, x => x < 3.5, studentsToTake);
+                this.FilterAndTake(studentsWithMarks, x => x < 3.5, studentsToTake);
             }
             else
             {
@@ -33,7 +32,9 @@ namespace BashSoft
             foreach (var username_score in studentsWithMarks)
             {
                 if (counter == studentsToTake)
+                {
                     break;
+                }
 
                 if (givenFilter(username_score.Value))
                 {

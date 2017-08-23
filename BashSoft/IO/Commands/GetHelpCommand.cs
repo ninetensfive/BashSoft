@@ -1,13 +1,26 @@
 ﻿namespace BashSoft.IO.Commands
 {
+    using BashSoft.Attributes;
     using Contracts;
     using Execptions;
 
+    [Alias("help")]
     public class GetHelpCommand : Command
     {
-        public GetHelpCommand(string input, string[] data, IContentComparer judge, IDatabase repository,
-            IDirectoryManager inputOutputManager) : base(input, data, judge, repository, inputOutputManager)
+        public GetHelpCommand(
+            string input, string[] data) 
+            : base(input, data)
         {
+        }
+
+        public override void Execute()
+        {
+            if (this.Data.Length != 1)
+            {
+                throw new InvalidCommandException(this.Input);
+            }
+
+            this.DisplayHelp();
         }
 
         private void DisplayHelp()
@@ -27,16 +40,6 @@
             OutputWriter.WriteMessageOnNewLine(string.Format("|{0, -98}|", "get help – help"));
             OutputWriter.WriteMessageOnNewLine($"{new string('_', 100)}");
             OutputWriter.WriteEmptyLine();
-        }
-
-        public override void Execute()
-        {
-            if (this.Data.Length != 1)
-            {
-                throw new InvalidCommandException(this.Input);
-            }
-
-            this.DisplayHelp();
         }
     }
 }

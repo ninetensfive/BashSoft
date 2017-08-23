@@ -1,15 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using BashSoft.Contracts;
-using BashSoft.Execptions;
-using BashSoft.IO.Commands;
-
-namespace BashSoft
+﻿namespace BashSoft
 {
-    internal class DisplayCommand : Command
+    using System;
+    using System.Collections.Generic;
+    using BashSoft.Attributes;
+    using Contracts;
+    using Execptions;
+    using IO.Commands;
+
+    [Alias("display")]
+    public class DisplayCommand : Command
     {
-        public DisplayCommand(string input, string[] data, IContentComparer judge, IDatabase repository, IDirectoryManager inputOutputManager)
-            : base(input, data, judge, repository, inputOutputManager)
+        [Inject]
+        private IDatabase repository;
+
+        public DisplayCommand(string input, string[] data)
+            : base(input, data)
         {
         }
 
@@ -26,13 +31,13 @@ namespace BashSoft
             if (entityToDispay.Equals("students", StringComparison.OrdinalIgnoreCase))
             {
                 IComparer<IStudent> studentComparator = this.CreateStudentComparator(sortType);
-                ISimpleOrderedBag<IStudent> list = this.Repository.GetAllStudentsSorted(studentComparator);
+                ISimpleOrderedBag<IStudent> list = this.repository.GetAllStudentsSorted(studentComparator);
                 OutputWriter.WriteMessageOnNewLine(list.JoinWith(Environment.NewLine));
             }
             else if (entityToDispay.Equals("courses", StringComparison.OrdinalIgnoreCase))
             {
                 IComparer<ICourse> courseComparator = this.CreateCourseComparator(sortType);
-                ISimpleOrderedBag<ICourse> list = this.Repository.GetAllCoursesSorted(courseComparator);
+                ISimpleOrderedBag<ICourse> list = this.repository.GetAllCoursesSorted(courseComparator);
                 OutputWriter.WriteMessageOnNewLine(list.JoinWith(Environment.NewLine));
             }
             else
@@ -74,6 +79,5 @@ namespace BashSoft
 
             throw new InvalidCommandException(this.Input);
         }
-
     }
 }
